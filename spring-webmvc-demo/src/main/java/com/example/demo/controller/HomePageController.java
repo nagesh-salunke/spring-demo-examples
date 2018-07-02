@@ -3,10 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.viewmodel.UserDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
 
 @Controller
 public class HomePageController {
@@ -29,9 +32,12 @@ public class HomePageController {
     }
 
     @PostMapping("/register")
-    public String register(UserDetail userDetail) {
-        String name = userDetail.getFirstName();
-        return "redirect:/greeting/" + name;
+    public String register(@Valid UserDetail userDetail, Errors errors) {
+        if (!errors.hasErrors()) {
+            String name = userDetail.getFirstName();
+            return "redirect:/greeting/" + name;
+        }
+        return "redirect:/register";
     }
 
 }
