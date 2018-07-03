@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exceptions.RestrictedUserException;
 import com.example.demo.viewmodel.UserDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,7 +8,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Part;
 import javax.validation.Valid;
 
 @Controller
@@ -32,11 +32,15 @@ public class HomePageController {
     }
 
     @PostMapping("/register")
-    public String register(
+    public String register (
             @RequestPart("profilePicture") MultipartFile profilePicture,
             @Valid UserDetail userDetail, Errors errors) {
         if (!errors.hasErrors()) {
             String name = userDetail.getFirstName();
+
+            if (name.equals("nagesh")) {
+                throw new RestrictedUserException(name);
+            }
             return "redirect:/greeting/" + name;
         }
         return "redirect:/register";
