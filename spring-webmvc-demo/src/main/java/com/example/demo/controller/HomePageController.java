@@ -4,10 +4,7 @@ import com.example.demo.viewmodel.UserDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -33,7 +30,9 @@ public class HomePageController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid UserDetail userDetail, Errors errors) {
+    public String register(
+            @RequestPart("profilePicture") byte[] profilePicture,
+            @Valid UserDetail userDetail, Errors errors) {
         if (!errors.hasErrors()) {
             String name = userDetail.getFirstName();
             return "redirect:/greeting/" + name;

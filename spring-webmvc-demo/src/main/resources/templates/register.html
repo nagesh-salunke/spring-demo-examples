@@ -4,10 +4,13 @@
 </head>
 <body>
 <h1>Register</h1>
-<form method="POST" th:object="${userDetail}">
+<form method="POST" th:object="${userDetail}" enctype="multipart/form-data">
     <label> First Name</label>: <input type="text" th:field="*{firstName}"/><br/>
     <label> Last Name</label>: <input type="text" th:field="*{lastName}" /><br/>
     <label> UserName</label>: <input type="text" th:field="*{userName}" /><br/>
+    <label>Profile Picture</label>:
+    <input type="file" name="profilePicture" accept="image/jpeg,image/png,image/gif" /><br/>
     <input type="submit" value="register" /> </form>
 </body>
+
 </html>
