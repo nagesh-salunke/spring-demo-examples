@@ -1,14 +1,13 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Register</title>
 </head>
 <body>
 <h1>Register</h1>
-<form method="POST">
-    First Name: <input type="text" name="firstName" /><br/>
-    Last Name: <input type="text" name="lastName" /><br/>
-    Username: <input type="text" name="userName" /><br/>
-    <input type="submit" value="Register" />
-</form>
+<form method="POST" th:object="${userDetail}">
+    <label> First Name</label>: <input type="text" th:field="*{firstName}"/><br/>
+    <label> Last Name</label>: <input type="text" th:field="*{lastName}" /><br/>
+    <label> UserName</label>: <input type="text" th:field="*{userName}" /><br/>
+    <input type="submit" value="register" /> </form>
 </body>
 </html>

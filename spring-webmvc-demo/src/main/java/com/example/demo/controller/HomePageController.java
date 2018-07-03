@@ -27,7 +27,8 @@ public class HomePageController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("userDetail", new UserDetail());
         return "register";
     }
 
