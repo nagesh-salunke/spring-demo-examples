@@ -43,4 +43,10 @@ public class EventsController {
         model.addAttribute("entries", entries);
         return "dashboard";
     }
+
+    @GetMapping("/admin")
+    public String admin(Model model) {
+        model.addAttribute("projects", githubProjectRepository.findAll());
+        return "admin";
+    }
 }
