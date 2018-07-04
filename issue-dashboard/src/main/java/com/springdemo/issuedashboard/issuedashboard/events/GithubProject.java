@@ -17,7 +17,7 @@ public class GithubProject implements Serializable{
 
     @Column(unique = true)
     private String repoName;
-    
+
     public GithubProject() {
     }
 
@@ -48,5 +48,14 @@ public class GithubProject implements Serializable{
 
     public void setRepoName(String repoName) {
         this.repoName = repoName;
+    }
+
+    @Override
+    public String toString() {
+        return "GithubProject{" +
+                "id=" + id +
+                ", orgName='" + orgName + '\'' +
+                ", repoName='" + repoName + '\'' +
+                '}';
     }
 }
