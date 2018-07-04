@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class GithubClient {
@@ -33,6 +35,9 @@ public class GithubClient {
         return restTemplate.getForEntity(EVENT_ISSUES_URL, RepositoryEvent[].class, orgName, repoName);
     }
 
+    public List<RepositoryEvent> fetchEventsList(String orgName, String repoName) {
+        return Arrays.asList(fetchEvents(orgName, repoName).getBody());
+    }
 
     private static class GithubTokenInterceptor implements ClientHttpRequestInterceptor {
 
