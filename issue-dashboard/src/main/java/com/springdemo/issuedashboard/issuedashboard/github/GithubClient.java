@@ -1,6 +1,7 @@
 package com.springdemo.issuedashboard.issuedashboard.github;
 
 import com.springdemo.issuedashboard.issuedashboard.GithubProperties;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class GithubClient {
@@ -25,9 +27,10 @@ public class GithubClient {
 
     private final RestTemplate restTemplate;
 
-    public GithubClient(RestTemplateBuilder builder, GithubProperties properties) {
+    public GithubClient(RestTemplateBuilder builder, GithubProperties properties, MeterRegistry meterRegistry) {
         this.restTemplate = builder
                 .additionalInterceptors(new GithubTokenInterceptor(properties.getToken()))
+                .additionalInterceptors(new MetricsInterceptor(meterRegistry))
                 .build();
     }
 
@@ -55,6 +58,22 @@ public class GithubClient {
                         "Basic " + Base64Utils.encodeToString(basicAuthValue));
             }
             return clientHttpRequestExecution.execute(httpRequest, bytes);
+        }
+    }
+
+    private static class MetricsInterceptor implements ClientHttpRequestInterceptor {
+
+        private AtomicInteger gauge;
+
+        public MetricsInterceptor(MeterRegistry meterRegistry) {
+            this.gauge = meterRegistry.gauge("github.ratelimit.remaining", new AtomicInteger(-1));
+        }
+
+        @Override
+        public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] bytes, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
+            ClientHttpResponse response = clientHttpRequestExecution.execute(httpRequest, bytes);
+            this.gauge.set(Integer.parseInt(response.getHeaders().getFirst("X-RateLimit-Remaining")));
+            return response;
         }
     }
 }
