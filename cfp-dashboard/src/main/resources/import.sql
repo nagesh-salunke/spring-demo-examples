@@ -1,1 +1,1 @@
-INSERT INTO SPEAKER(ID, FIRST_NAME, LAST_NAME, TWITTER, BIOg) values (0, 'Nagesh', 'Salunke', 'nagesh_salunke', 'programmer')
+INSERT INTO SPEAKER(ID, FIRST_NAME, LAST_NAME, TWITTER, BIO) values (0, 'Nagesh', 'Salunke', 'nagesh_salunke', 'programmer')
